@@ -286,7 +286,6 @@ class RMTrainer(SupervisedTrainerBase):
         )
 
         if self.cfgs.data_cfgs.eval_datasets:
-            self.logger.print('\n***** Evaluating at the beginning *****')
             self.logger.log(self.eval(), step=0)
 
         for epoch in range(int(self.cfgs.train_cfgs.epochs)):
@@ -319,15 +318,9 @@ class RMTrainer(SupervisedTrainerBase):
                     self.logger.print(f'\n***** Evaluating at step {self.global_step} *****')
                     self.logger.log(self.eval(), step=self.global_step)
 
-                if self.cfgs.data_cfgs.eval_datasets and self.cfgs.train_cfgs.eval_strategy == 'epoch':
-                    self.logger.print(
-                        f'\n***** Evaluating at epoch {epoch + 1}/{self.cfgs.train_cfgs.epochs} *****',
-                    )
-                    self.logger.log(self.eval(), step=self.global_step)
-
-            else:
+            if self.cfgs.data_cfgs.eval_datasets and self.cfgs.train_cfgs.eval_strategy == 'epoch':
                 self.logger.print(
-                    f'\n***** Evaluating...*****',
+                    f'\n***** Evaluating at epoch {epoch + 1}/{self.cfgs.train_cfgs.epochs} *****',
                 )
                 self.logger.log(self.eval(), step=self.global_step)
 

@@ -62,6 +62,7 @@ class PreferenceDataset(Dataset):
         size: int | None = None,
         name: str | None = None,
         split: str | None = None,
+        subset: str | None = None,
         data_files: str | None = None,
         optional_args: list | str = [],
     ):
@@ -78,6 +79,7 @@ class PreferenceDataset(Dataset):
             path,
             split=split,
             data_files=data_files,
+            subset=subset,
             *optional_args,
             trust_remote_code=True,
         )
@@ -139,6 +141,7 @@ class PreferenceTokenizedDataset(Dataset):
         size: int | None = None,
         name: str | None = None,
         split: str | None = None,
+        subset: str | None = None,
         data_files: str | None = None,
         optional_args: list | str = [],
     ):

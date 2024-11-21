@@ -135,6 +135,12 @@ Fianlly, install `align-anything` by:
 pip install -e .
 ```
 
+**Note**: If your installation is slow, you can try to setup the tsinghua source.
+
+```bash
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
 ## Wandb Logger
 
 We support `wandb` logging. By default, it is set to offline. If you need to view wandb logs online, you can specify the environment variables of `WANDB_API_KEY` before starting the training:
@@ -206,13 +212,12 @@ deepspeed \
 	--output_dir ${OUTPUT_DIR}
 ```
 
-We can run DPO with [LLaVA-v1.5-7B](https://huggingface.co/llava-hf/llava-1.5-7b-hf) (HF format) and [Align-Anything-400K](https://huggingface.co/datasets/PKU-Alignment/align-anything-400k) dataset using the follow script:
+We can run DPO with [LLaVA-v1.5-7B](https://huggingface.co/llava-hf/llava-1.5-7b-hf) (HF format) and [SPA-VL](https://huggingface.co/datasets/sqrti/SPA-VL) dataset using the follow script:
 
 ```bash
 MODEL_NAME_OR_PATH="llava-hf/llava-1.5-7b-hf" # model path
-TRAIN_DATASETS="PKU-Alignment/align-anything-400k" # dataset path
-TRAIN_TEMPLATE="AA_TI2T" # dataset template
-TRAIN_NAME="text-image-to-text" # dataset name
+TRAIN_DATASETS="sqrti/SPA-VL" # dataset path
+TRAIN_TEMPLATE="SPA_VL" # dataset template
 TRAIN_SPLIT="train" # split the dataset
 OUTPUT_DIR="../output/dpo" # output dir
 export WANDB_API_KEY="YOUR_WANDB_KEY" # wandb logging
@@ -227,7 +232,6 @@ deepspeed \
 	--model_name_or_path ${MODEL_NAME_OR_PATH} \
 	--train_datasets ${TRAIN_DATASETS} \
 	--train_template ${TRAIN_TEMPLATE} \
-	--train_name ${TRAIN_NAME} \
 	--train_split ${TRAIN_SPLIT} \
 	--output_dir ${OUTPUT_DIR}
 ```

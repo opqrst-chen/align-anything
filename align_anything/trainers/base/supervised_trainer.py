@@ -80,6 +80,7 @@ class SupervisedTrainerBase:
                 name=self.cfgs.data_cfgs.train_name,
                 size=self.cfgs.data_cfgs.train_size,
                 split=self.cfgs.data_cfgs.train_split,
+                subset=self.cfgs.data_cfgs.train_subset,
                 data_files=self.cfgs.data_cfgs.train_data_files,
                 optional_args=self.cfgs.data_cfgs.train_optional_args,
             )
@@ -99,6 +100,7 @@ class SupervisedTrainerBase:
                 name=self.cfgs.data_cfgs.eval_name,
                 split=self.cfgs.data_cfgs.eval_split,
                 size=self.cfgs.data_cfgs.eval_size,
+                subset=self.cfgs.data_cfgs.eval_subset,
                 data_files=self.cfgs.data_cfgs.eval_data_files,
                 optional_args=self.cfgs.data_cfgs.eval_optional_args,
             )
@@ -358,7 +360,7 @@ class SupervisedTrainerBase:
 
         if is_main_process():
             model_to_save.config.to_json_file(output_config_file)
-            self.tokenizer.save_pretrained(output_dir)
+            # self.tokenizer.save_pretrained(self.cfgs.logger_cfgs.output_dir)
             if self.processor is not None:
                 self.processor.save_pretrained(output_dir)
 

@@ -18,6 +18,7 @@ from typing import Any, Callable
 from typing_extensions import TypedDict  # Python 3.10+
 
 import torch
+import json
 import transformers
 from torch.utils.data import Dataset
 from torchvision import transforms
@@ -59,6 +60,7 @@ class PreferenceDataset(Dataset):
         name: str | None = None,
         size: int | None = None,
         split: str | None = None,
+        subset: str | None = None,
         data_files: str | None = None,
         optional_args: list | str = [],
     ):
@@ -71,19 +73,27 @@ class PreferenceDataset(Dataset):
 
         if isinstance(optional_args, str):
             optional_args = [optional_args]
-        self.raw_data = load_dataset(
-            path,
-            name=name,
-            split=split,
-            data_files=data_files,
-            *optional_args,
-            trust_remote_code=True,
-        )
+        if '.json' in path:
+            with open(path, 'r') as f:
+                self.raw_data = json.load(f)
+        else:   
+            self.raw_data = load_dataset(
+                path,
+                name=name,
+                split=split,
+                data_files=data_files,
+                subset=subset,
+                *optional_args,
+                trust_remote_code=True,
+            )
         self.valid_indices = self.filter_indices()
 
         if size:
             size = min(size, len(self.raw_data))
-            self.raw_data = self.raw_data.select(range(int(size)))
+            if isinstance(self.raw_data, Dataset):
+                self.raw_data = self.raw_data.select(range(int(size)))
+            else:
+                self.raw_data = self.raw_data[:size]
 
     def filter_indices(self):
         valid_indices = []
@@ -183,6 +193,7 @@ class RandomPreferenceDataset(Dataset):
         processor: transformers.ProcessorMixin | transforms.Compose | None = None,
         size: int | None = None,
         split: str | None = None,
+        subset: str | None = None,
         data_files: str | None = None,
         optional_args: list | str = [],
     ):
@@ -193,6 +204,7 @@ class RandomPreferenceDataset(Dataset):
             path,
             split=split,
             data_files=data_files,
+            subset=subset,
             *optional_args,
             trust_remote_code=True,
         )

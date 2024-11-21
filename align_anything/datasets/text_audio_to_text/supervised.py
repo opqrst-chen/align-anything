@@ -63,6 +63,7 @@ class SupervisedDataset(Dataset):
         name: str | None = None,
         size: int | None = None,
         split: str | None = None,
+        subset: str | None = None,
         data_files: str | None = None,
         optional_args: list | str = [],
     ):
@@ -77,6 +78,7 @@ class SupervisedDataset(Dataset):
             name=name if name and name!="None" else None,
             split=split if split and split!="None" else None,
             data_files=data_files if data_files and data_files!="None" else None,
+            subset=subset,
             *optional_args,
             trust_remote_code=True,
         )
